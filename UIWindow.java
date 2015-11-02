@@ -38,6 +38,24 @@ public class UIWindow extends JFrame {
 		add(canvas, BorderLayout.CENTER);
 		pack();
 		setVisible(true);
+
+		CircularLinkedList<Integer> clist = new CircularLinkedList<Integer>();
+		clist.print();
+		clist.add(10);
+		clist.print();
+		clist.add(12);
+		clist.print();
+		clist.add(44);
+		clist.add(44);
+		clist.add(-8);
+		clist.add(11);
+		clist.add(48);
+		clist.print();
+		System.out.println("----");
+		clist.remove(44); // FAIL
+		clist.remove(12);
+		clist.remove(10);
+		clist.print();
 	}
 
 	public void actionPerformed(OptionsPane sender, int value) {

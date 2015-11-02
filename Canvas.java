@@ -8,14 +8,29 @@ import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.io.FileInputStream;
 import java.lang.Thread;
+import java.lang.Runnable;
 
-public class Canvas extends JPanel {
+public class Canvas extends JPanel implements Runnable {
 	private boolean meassageToDisplay;
 	private String message;
+	private Thread animationThread;
 
 	public Canvas() {
 		setPreferredSize(new Dimension(800,420));
 		meassageToDisplay = false;
+		animationThread = new Thread(this);
+	}
+
+	public void run() {
+
+	}
+
+	public void start() {
+
+	}
+
+	public void stop() {
+
 	}
 
 	public void displayMessage(String str) {
