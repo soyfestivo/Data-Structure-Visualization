@@ -3,10 +3,20 @@
 public class CircularLinkedList<T> {
 	protected Node<T> start;
 	protected int length;
+	private boolean isFrontEnd;
+	private Canvas parent;
 
 	public CircularLinkedList() {
 		start = null; // there is nothing in the list
 		length = 0;   // the length is 0
+		isFrontEnd = false;
+		parent = null;
+	}
+
+	public CircularLinkedList(Canvas parent) {
+		this();
+		isFrontEnd = true;
+		this.parent = parent;
 	}
 
 	public void add(T item) {
@@ -25,6 +35,33 @@ public class CircularLinkedList<T> {
 			tmp.next = n; // complete the loop
 		}
 		length++;
+	}
+
+	public int length() {
+		return length;
+	}
+
+	public T getLast() {
+		Node<T> tmp = start;
+		while(tmp.next != start) {
+			tmp = tmp.next;
+		}
+		return tmp.value;
+	}
+
+	public T pop() {
+		T tmp = start.value;
+		remove(start);
+		return tmp;
+	}
+
+	private int getPositionInList(Node n) {
+		Node<T> tmp = start;
+		int count = 0;
+		while(tmp != n) {
+			count++;
+		}
+		return count;
 	}
 
 	public boolean remove(T item) {
@@ -84,13 +121,29 @@ public class CircularLinkedList<T> {
 		System.out.print("]\n");
 	}
 
-	protected class Node<T> {
+	public class Node<T> {
 		public T value;
 		public Node<T> next;
+		public boolean isCurrent;
 
 		public Node(T value) {
 			this.value = value;
 			next = null;
+			isCurrent = false;
+		}
+
+		public changePosition(int x, int y) {
+			position[0] = x;
+			position[1] = y;
+		}
+
+		public double[] computeXY() {
+			int myPosition = getPositionInList(this);
+			double angle = ((double) myPosition) * (Math.PI / (double) length());
+			double x = Math.cos(angle);
+			double y = Math.sin(angle);
+			
+			return new double[] {x, y};
 		}
 	}
 }

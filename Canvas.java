@@ -14,23 +14,41 @@ public class Canvas extends JPanel implements Runnable {
 	private boolean meassageToDisplay;
 	private String message;
 	private Thread animationThread;
+	private CircularLinkedList<CircularLinkedList<Integer>> animationQueue;
+	private CircularLinkedList<Integer> list;
 
 	public Canvas() {
 		setPreferredSize(new Dimension(800,420));
 		meassageToDisplay = false;
 		animationThread = new Thread(this);
+		animationQueue = new CircularLinkedList<CircularLinkedList<Integer>>(this);
+		list = new CircularLinkedList<Integer>();
 	}
 
 	public void run() {
-
+		while(1) {
+			if(animationQueue.length() > 0) {
+				handleDraw(animationQueue.pop());
+			}
+			else {
+				try {
+					Thread.sleep(250);
+				}
+				catch(Exception e) {}
+			}
+		}
 	}
 
 	public void start() {
-
+		run();
 	}
 
 	public void stop() {
+		// do nothing
+	}
 
+	private handleDraw(CircularLinkedList<Integer> state) {
+		
 	}
 
 	public void displayMessage(String str) {
