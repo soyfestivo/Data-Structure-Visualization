@@ -3,12 +3,17 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 
-public class OptionsPane extends JPanel implements ActionListener {
-	private JTextField textBox;
-	private Button actionButton;
-	private UIWindow parentClass;
+public class OptionsPane extends JPanel implements ActionListener
+{
+	private JTextField textBox; // textbox is a JTextField object
+	private Button actionButton; // actionButton is a Button object
+	private UIWindow parentClass; // parentclass will represent a UIWindow object
 
-	public OptionsPane(UIWindow parentClass, String name, String action) {
+	public OptionsPane(UIWindow parentClass, String name, String action)
+    // PRE : parentClass is valid, name and action not null
+    // POST: Returns an OptionsPane object that initializes a GUI Windows with the corresponding textbox
+    //       actionButton and labels displaying
+    {
 		super();
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BorderLayout());
@@ -26,19 +31,30 @@ public class OptionsPane extends JPanel implements ActionListener {
 		add(buttonPanel);
 	}
 
-	private int parseInput() {
+	private int parseInput()
+    // POST: FCTVAL == returns an integer based on the number string that was inserted in the textbox
+    {
 		int data = 0;
-		try {
+		
+        // If the attempt is a success, parse string into an int
+        try
+        {
 			data = new Integer(textBox.getText());
 		}
-		catch(Exception e) {
+		// If the attempt is a failure, data variables becomes -1
+        catch(Exception e)
+        {
 			data = -1;
 		}
 		return data;
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == actionButton) {
+	public void actionPerformed(ActionEvent e)
+    // POST: FCTVAL == executes the parseInput function, in the event that the button is pressed
+    {
+        // Will only execute if the button is pressed
+		if(e.getSource() == actionButton)
+        {
 			parentClass.actionPerformed(this, parseInput());
 		}
 	}
