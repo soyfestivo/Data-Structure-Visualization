@@ -26,6 +26,7 @@ public class Canvas extends JPanel implements Runnable {
 		animationQueue = new CircularLinkedList<CircularLinkedList<Integer>>();
 		list = new CircularLinkedList<Integer>(this);
 		lastDrawState = null;
+		message = "";
 		messageColor = new Color(0, 204, 255);
 
 		animationThread.start();

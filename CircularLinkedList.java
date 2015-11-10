@@ -110,7 +110,7 @@ public class CircularLinkedList<T> {
 		}
 		while((tmp.next != start && count == 0) || count < 2) { // scan at most twice through loop
 			newState(tmp);
-			if(tmp.next.value == item) { // we found it!
+			if(tmp.next.value.equals(item)) { // we found it!
 				if(tmp.next == start && tmp != start) { // removing first of list
 					start = tmp.next.next;
 				}
@@ -139,7 +139,7 @@ public class CircularLinkedList<T> {
 		}
 		while((tmp.next != start && count == 0) || count < 1) {
 			newState(tmp);
-			if(tmp.value == item) {
+			if(tmp.value.equals(item)) {
 				newState(tmp);
 				newState(tmp);
 				newState(tmp);
