@@ -17,15 +17,28 @@ public class Canvas extends JPanel implements Runnable {
 	private CircularLinkedList<CircularLinkedList<Integer>> animationQueue;
 	private CircularLinkedList<Integer> lastDrawState;
 	private CircularLinkedList<Integer> list;
+	private Color messageColor;
 
 	public Canvas() {
 		setPreferredSize(new Dimension(800,420));
 		meassageToDisplay = false;
 		animationThread = new Thread(this);
-		animationQueue = new CircularLinkedList<CircularLinkedList<Integer>>(this);
-		list = new CircularLinkedList<Integer>();
+		animationQueue = new CircularLinkedList<CircularLinkedList<Integer>>();
+		list = new CircularLinkedList<Integer>(this);
 		lastDrawState = null;
+		messageColor = new Color(0, 204, 255);
+
 		animationThread.start();
+
+		list.add(1, false);
+		list.add(2, false);
+		list.add(3, false);
+		list.add(4, false);
+		list.add(5, false);
+		list.add(6, false);
+		list.add(7, false);
+		list.add(8, false);
+		animationQueue.add(list.clone());
 	}
 
 	public void run() {
@@ -33,12 +46,10 @@ public class Canvas extends JPanel implements Runnable {
 			if(animationQueue.length() > 0) {
 				handleDraw(animationQueue.pop());
 			}
-			else {
-				try {
-					Thread.sleep(250);
-				}
-				catch(Exception e) {}
+			try {
+				Thread.sleep(250);
 			}
+			catch(Exception e) {}
 		}
 	}
 
@@ -72,27 +83,40 @@ public class Canvas extends JPanel implements Runnable {
 	}
 
 	public void displayInsert(int value) {
-		animationThread.interrupt();
 		list.add(value);
-		animationQueue.add(list);
+		messageColor = new Color(0, 204, 255);
+		message = "The value '"+value+"' was added to the list";
 	}
 
 	public void displayRemove(int value) {
-		animationThread.interrupt();
-		list.remove(value);
-		animationQueue.add(list);
+		if(list.remove(value)) {
+			messageColor = new Color(0, 204, 255);
+			message = "The value '"+value+"' was removed in the list";
+		}
+		else {
+			messageColor = new Color(195, 0, 0);
+			message = "The value '"+value+"' was not removed from the list because it does not exist";
+		}
 	}
 
-	private void drawMessage(Graphics g) {
+	public void displaySearch(int value) {
+		if(list.search(value)) {
+			messageColor = new Color(0, 204, 255);
+			message = "The value '"+value+"' was found in the list";
+		}
+		else {
+			messageColor = new Color(195, 0, 0);
+			message = "The value '"+value+"' was not found in the list";
+		}
+	}
+
+	private void drawMessage(Graphics g, Color background) {
 		int width = g.getFontMetrics().stringWidth(message);
 		int height = g.getFontMetrics().getHeight();
-		g.setColor(new Color(0, 204, 255));
+		g.setColor(background);
 		g.fillRect(0, 0, width + 24, height + 24);
 		g.setColor(Color.BLACK);
-		g.drawString(message, 12, 12);
-		meassageToDisplay = false;
-		//Thread.sleep(3000);
-		repaint(0, 0, getWidth(), getHeight());
+		g.drawString(message, 12, 24);
 	}
 
 	@Override
@@ -101,15 +125,16 @@ public class Canvas extends JPanel implements Runnable {
 		g.setColor(Color.RED);
 		ScaledPoint.setSize(getWidth(), getHeight());
 
+		if(meassageToDisplay) {
+			drawMessage(g, messageColor);
+		}
+
 		if(lastDrawState != null) {
 			try {
 				lastDrawState.drawGraph(g);
 			}
-			catch(Exception e) {}
-		}
-
-		if(meassageToDisplay) {
-			drawMessage(g);
+			catch(Exception e) {
+			}
 		}
 	}
 }

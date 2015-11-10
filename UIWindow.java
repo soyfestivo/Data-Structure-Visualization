@@ -83,7 +83,7 @@ public class UIWindow extends JFrame {
 
 		if(sender == searchPane) 	//Event handling for searchPane
 		{
-			//JOptionPane.showInternalMessageDialog(this, "information", "Search Performed", JOptionPane.INFORMATION_MESSAGE);
+			canvas.displaySearch(value);
 		}
 	}
 

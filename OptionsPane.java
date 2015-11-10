@@ -56,6 +56,7 @@ public class OptionsPane extends JPanel implements ActionListener
 		if(e.getSource() == actionButton)
         {
 			parentClass.actionPerformed(this, parseInput());
+			textBox.setText("");
 		}
 	}
 }

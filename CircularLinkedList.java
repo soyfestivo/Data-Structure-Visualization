@@ -33,12 +33,12 @@ public class CircularLinkedList<T> {
 				newState(tmp);
 				tmp = tmp.next;
 			}
+			// tmp.next == start at this point
 			n.next = start;
-			start = n;
 			tmp.next = n; // complete the loop
-			newState(n);
 		}
 		length++;
+		newState(null);
 	}
 
 	public void add(T item, boolean isCurrent) {
@@ -53,18 +53,22 @@ public class CircularLinkedList<T> {
 				tmp = tmp.next;
 			}
 			n.next = start;
-			start = n;
 			tmp.next = n; // complete the loop
 		}
 		length++;
 	}
 
 	private void newState(Node<T> n) {
-		/*if(isFrontEnd) {
-			n.isCurrent = true;
-			parent.pushAnimationState((CircularLinkedList<Integer>) this); // this.clone()
-			n.isCurrent = false;
-		}*/
+		if(isFrontEnd) {
+			if(n != null) {
+				n.isCurrent = true;
+				parent.pushAnimationState((CircularLinkedList<Integer>) this.clone()); // this.clone()
+				n.isCurrent = false;
+			}
+			else {
+				parent.pushAnimationState((CircularLinkedList<Integer>) this.clone()); // this.clone()
+			}
+		}
 	}
 
 	public int length() {
@@ -101,7 +105,11 @@ public class CircularLinkedList<T> {
 	public boolean remove(T item) {
 		Node<T> tmp = start;
 		int count = 0;
+		if(length == 0) {
+			return false;
+		}
 		while((tmp.next != start && count == 0) || count < 2) { // scan at most twice through loop
+			newState(tmp);
 			if(tmp.next.value == item) { // we found it!
 				if(tmp.next == start && tmp != start) { // removing first of list
 					start = tmp.next.next;
@@ -111,6 +119,7 @@ public class CircularLinkedList<T> {
 					start = null;
 				}
 				length--;
+				newState(null);
 				return true;
 			}
 			if(tmp == start) {
@@ -118,14 +127,24 @@ public class CircularLinkedList<T> {
 			}
 			tmp = tmp.next;
 		}
+		newState(null);
 		return false;
 	}
 
 	public boolean search(T item) {
 		Node<T> tmp = start;
 		int count = 0;
+		if(length == 0) {
+			return false;
+		}
 		while((tmp.next != start && count == 0) || count < 1) {
+			newState(tmp);
 			if(tmp.value == item) {
+				newState(tmp);
+				newState(tmp);
+				newState(tmp);
+				newState(tmp);
+				newState(null);
 				return true;
 			}
 			if(tmp.next == start) {
@@ -133,6 +152,7 @@ public class CircularLinkedList<T> {
 			}
 			tmp = tmp.next;
 		}
+		newState(null);
 		return false;
 	}
 
@@ -158,9 +178,9 @@ public class CircularLinkedList<T> {
 	@Override
 	public CircularLinkedList<T> clone() {
 		CircularLinkedList<T> newList = new CircularLinkedList<T>(); // pretend not UI version
-		newList.length = this.length;
 		Node<T> tmp = start;
 		if(tmp == null) {
+			newList.isFrontEnd = true;
 			newList.parent = this.parent;
 			return newList;
 		}
@@ -169,6 +189,7 @@ public class CircularLinkedList<T> {
 			tmp = tmp.next;
 		}
 		newList.add(tmp.value, tmp.isCurrent); // for the last one
+		newList.isFrontEnd = true;
 		newList.parent = this.parent;
 		return newList;
 	}
@@ -186,11 +207,15 @@ public class CircularLinkedList<T> {
 				g.setColor(new Color(100, 200, 100));
 			}
 			else {
-				g.setColor(new Color(175, 175, 175));
+				g.setColor(new Color(130, 225, 235));
 			}
 			g.fillOval(pos[0] - 25, pos[1] - 25, 50, 50);
 			g.setColor(Color.BLACK);
-			g.drawString(n.value.toString(), pos[0], pos[1]);
+			if(n == start) {
+				g.drawOval(pos[0] - 20, pos[1] - 20, 40, 40);
+			}
+			g.drawOval(pos[0] - 25, pos[1] - 25, 50, 50);
+			g.drawString(n.value.toString(), pos[0], pos[1] + 5);
 			
 			if(n.next == start) {
 				count++;
@@ -218,8 +243,8 @@ public class CircularLinkedList<T> {
 		public int[] computeXY() {
 			int myPosition = getPositionInList(this);
 			double angle = (((double) myPosition) * ((2*Math.PI) / (double) length));
-			double x = Math.cos(angle) * 0.5;
-			double y = Math.sin(angle) * 0.5;
+			double x = Math.cos(angle) * 0.7;
+			double y = Math.sin(angle) * 0.7;
 			int[] tmp = ScaledPoint.getRealCoordinance(x, y);
 			
 			return ScaledPoint.getRealCoordinance(x, y);
