@@ -70,24 +70,21 @@ public class UIWindow extends JFrame {
 
 	public void actionPerformed(OptionsPane sender, int value) {
 		canvas.displayMessage("the value we got was: " + value);
-		/*
 
 		if(sender == insertPane)	//Event handling for insertPane
 		{
-			JOptionPane.showInternalMessageDialog(this, "information", "Insert Performed", JOptionPane.INFORMATION_MESSAGE);
+			canvas.displayInsert(value);
 		}
 
 		if(sender == removePane)	//Event handling for removePane
 		{
-			JOptionPane.showInternalMessageDialog(this, "information", "Remove Performed", JOptionPane.INFORMATION_MESSAGE);
+			canvas.displayRemove(value);
 		}
 
 		if(sender == searchPane) 	//Event handling for searchPane
 		{
-			JOptionPane.showInternalMessageDialog(this, "information", "Search Performed", JOptionPane.INFORMATION_MESSAGE);
+			//JOptionPane.showInternalMessageDialog(this, "information", "Search Performed", JOptionPane.INFORMATION_MESSAGE);
 		}
-
-		*/
 	}
 
 	public static void main(String[] args) {

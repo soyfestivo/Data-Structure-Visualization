@@ -15,6 +15,7 @@ public class Canvas extends JPanel implements Runnable {
 	private String message;
 	private Thread animationThread;
 	private CircularLinkedList<CircularLinkedList<Integer>> animationQueue;
+	private CircularLinkedList<Integer> lastDrawState;
 	private CircularLinkedList<Integer> list;
 
 	public Canvas() {
@@ -23,10 +24,12 @@ public class Canvas extends JPanel implements Runnable {
 		animationThread = new Thread(this);
 		animationQueue = new CircularLinkedList<CircularLinkedList<Integer>>(this);
 		list = new CircularLinkedList<Integer>();
+		lastDrawState = null;
+		animationThread.start();
 	}
 
 	public void run() {
-		while(1) {
+		while(true) {
 			if(animationQueue.length() > 0) {
 				handleDraw(animationQueue.pop());
 			}
@@ -47,14 +50,37 @@ public class Canvas extends JPanel implements Runnable {
 		// do nothing
 	}
 
-	private handleDraw(CircularLinkedList<Integer> state) {
-		
+	public void pushAnimationState(CircularLinkedList<Integer> state) {
+		animationQueue.add(state);
+	}
+
+	private void handleDraw(CircularLinkedList<Integer> state) {
+		if(lastDrawState == null) {
+			lastDrawState = list;
+		}
+		else {
+			lastDrawState = state;
+		}
+		repaint(0, 0, getWidth(), getHeight());
+		//state.drawGraph(getGraphics());	
 	}
 
 	public void displayMessage(String str) {
 		message = str;
 		meassageToDisplay = true;
 		repaint(0, 0, getWidth(), getHeight());
+	}
+
+	public void displayInsert(int value) {
+		animationThread.interrupt();
+		list.add(value);
+		animationQueue.add(list);
+	}
+
+	public void displayRemove(int value) {
+		animationThread.interrupt();
+		list.remove(value);
+		animationQueue.add(list);
 	}
 
 	private void drawMessage(Graphics g) {
@@ -73,7 +99,14 @@ public class Canvas extends JPanel implements Runnable {
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.setColor(Color.RED);
-		g.fillRect(0, 0, getWidth(), getHeight());
+		ScaledPoint.setSize(getWidth(), getHeight());
+
+		if(lastDrawState != null) {
+			try {
+				lastDrawState.drawGraph(g);
+			}
+			catch(Exception e) {}
+		}
 
 		if(meassageToDisplay) {
 			drawMessage(g);

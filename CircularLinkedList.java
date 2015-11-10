@@ -1,4 +1,5 @@
-
+import java.awt.Graphics;
+import java.awt.Color;
 
 public class CircularLinkedList<T> {
 	protected Node<T> start;
@@ -21,6 +22,27 @@ public class CircularLinkedList<T> {
 
 	public void add(T item) {
 		Node<T> n = new Node<T>(item);
+		newState(n);
+		if(start == null) {
+			start = n;
+			n.next = start;
+		}
+		else { // find end
+			Node tmp = start;
+			while(tmp.next != start) { // scan until loop
+				newState(tmp);
+				tmp = tmp.next;
+			}
+			n.next = start;
+			start = n;
+			tmp.next = n; // complete the loop
+			newState(n);
+		}
+		length++;
+	}
+
+	public void add(T item, boolean isCurrent) {
+		Node<T> n = new Node<T>(item, isCurrent);
 		if(start == null) {
 			start = n;
 			n.next = start;
@@ -37,6 +59,14 @@ public class CircularLinkedList<T> {
 		length++;
 	}
 
+	private void newState(Node<T> n) {
+		/*if(isFrontEnd) {
+			n.isCurrent = true;
+			parent.pushAnimationState((CircularLinkedList<Integer>) this); // this.clone()
+			n.isCurrent = false;
+		}*/
+	}
+
 	public int length() {
 		return length;
 	}
@@ -51,7 +81,7 @@ public class CircularLinkedList<T> {
 
 	public T pop() {
 		T tmp = start.value;
-		remove(start);
+		remove(start.value);
 		return tmp;
 	}
 
@@ -59,7 +89,11 @@ public class CircularLinkedList<T> {
 		Node<T> tmp = start;
 		int count = 0;
 		while(tmp != n) {
+			if(count > length) {
+				return -1;
+			}
 			count++;
+			tmp = tmp.next;
 		}
 		return count;
 	}
@@ -121,6 +155,50 @@ public class CircularLinkedList<T> {
 		System.out.print("]\n");
 	}
 
+	@Override
+	public CircularLinkedList<T> clone() {
+		CircularLinkedList<T> newList = new CircularLinkedList<T>(); // pretend not UI version
+		newList.length = this.length;
+		Node<T> tmp = start;
+		if(tmp == null) {
+			newList.parent = this.parent;
+			return newList;
+		}
+		while(tmp.next != start) {
+			newList.add(tmp.value, tmp.isCurrent);
+			tmp = tmp.next;
+		}
+		newList.add(tmp.value, tmp.isCurrent); // for the last one
+		newList.parent = this.parent;
+		return newList;
+	}
+
+	public void drawGraph(Graphics g) {
+		Node<T> n = start;
+		int count = 0;
+		while((n.next != start && count == 0) || count < 1) {
+			int[] pos = n.computeXY();
+			int[] nextPos = n.next.computeXY();
+			//System.out.println("--\nval: " + n.value + " position: " + pos[0] + ", " + pos[1]);
+			g.setColor(Color.BLACK);
+			g.drawLine(pos[0], pos[1], nextPos[0], nextPos[1]);
+			if(n.isCurrent) {
+				g.setColor(new Color(100, 200, 100));
+			}
+			else {
+				g.setColor(new Color(175, 175, 175));
+			}
+			g.fillOval(pos[0] - 25, pos[1] - 25, 50, 50);
+			g.setColor(Color.BLACK);
+			g.drawString(n.value.toString(), pos[0], pos[1]);
+			
+			if(n.next == start) {
+				count++;
+			}
+			n = n.next;
+		}
+	}
+
 	public class Node<T> {
 		public T value;
 		public Node<T> next;
@@ -132,18 +210,19 @@ public class CircularLinkedList<T> {
 			isCurrent = false;
 		}
 
-		public changePosition(int x, int y) {
-			position[0] = x;
-			position[1] = y;
+		public Node(T value, boolean isCurrent) {
+			this(value);
+			this.isCurrent = isCurrent;
 		}
 
-		public double[] computeXY() {
+		public int[] computeXY() {
 			int myPosition = getPositionInList(this);
-			double angle = ((double) myPosition) * (Math.PI / (double) length());
-			double x = Math.cos(angle);
-			double y = Math.sin(angle);
+			double angle = (((double) myPosition) * ((2*Math.PI) / (double) length));
+			double x = Math.cos(angle) * 0.5;
+			double y = Math.sin(angle) * 0.5;
+			int[] tmp = ScaledPoint.getRealCoordinance(x, y);
 			
-			return new double[] {x, y};
+			return ScaledPoint.getRealCoordinance(x, y);
 		}
 	}
 }
