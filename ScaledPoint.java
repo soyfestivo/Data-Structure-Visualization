@@ -1,23 +1,14 @@
-//Class for scaling/resizing the elements on the application
+//
+//Stephen Selke, Denis Radinski, Oliver Panasewicz, Jonathan Galvan
+//Project 3, Circular Linked List Visualization
+//CS 342
+//
 
+//Class for scaling/resizing the elements on the application
 public class ScaledPoint 
 {
 	private static int realWidth = 0;	//int for width of frame
 	private static int realHeight = 0;	//int for height of frame
-
-	//default constructor 
-	/*public static ScaledPoint() 
-	{
-		realWidth = 0;		//set width to 0	
-		realHeight = 0;		//set height to 0
-	}*/
-
-	/*public static ScaledPoint(int width, int height)
-	//PRE: width and height are positive values 
-	{
-		realWidth = width;		//set width to frame width
-		realHeight = height;	//set height to frame height
-	}*/
 
 	public static void setSize(int width, int height) 
 	//PRE: width and height are positive values

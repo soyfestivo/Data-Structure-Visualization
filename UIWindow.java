@@ -1,3 +1,9 @@
+//
+//Stephen Selke, Denis Radinski, Oliver Panasewicz, Jonathan Galvan
+//Project 3, Circular Linked List Visualization
+//CS 342
+//
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.JButton;

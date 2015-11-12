@@ -1,8 +1,15 @@
+//
+//Stephen Selke, Denis Radinski, Oliver Panasewicz, Jonathan Galvan
+//Project 3, Circular Linked List Visualization
+//CS 342
+//
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 
+//class for options bane on the gui
 public class OptionsPane extends JPanel implements ActionListener
 {
 	private JTextField textBox; // textbox is a JTextField object
@@ -14,6 +21,7 @@ public class OptionsPane extends JPanel implements ActionListener
     // POST: Returns an OptionsPane object that initializes a GUI Windows with the corresponding textbox
     //       actionButton and labels displaying
     {
+        //initialize graphical elements
 		super();
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BorderLayout());
@@ -23,9 +31,11 @@ public class OptionsPane extends JPanel implements ActionListener
 		textBox = new JTextField(5);
 		actionButton = new Button(action);
 
+        //add event listeners
 		actionButton.addActionListener(this);
 		buttonPanel.add(actionButton, BorderLayout.EAST);
 
+        //add elements to GUI
 		add(new JLabel(name));
 		add(textBox);
 		add(buttonPanel);
