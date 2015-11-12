@@ -23,7 +23,10 @@ public class UIWindow extends JFrame {
 	private OptionsPane searchPane;		//Pane for search option
 	private Canvas canvas;				//Canvas to draw on
 
-	public UIWindow(String title) {
+	public UIWindow(String title) 
+	// PRE: title is valid
+	//POST: new UIWindow created
+	{
 		super(title);						//call constructor of superclass 
 
 		setLayout(new BorderLayout());		//set layout of frame to border layout
@@ -50,28 +53,6 @@ public class UIWindow extends JFrame {
 		add(canvas, BorderLayout.CENTER);				//add the canvas to the UI
 		pack();											//force resize elements of UI
 		setVisible(true);								//make UI visible
-
-		/***TESTING****/
-
-		/*
-		CircularLinkedList<Integer> clist = new CircularLinkedList<Integer>();
-		clist.print();
-		clist.add(10);
-		clist.print();
-		clist.add(12);
-		clist.print();
-		clist.add(44);
-		clist.add(44);
-		clist.add(-8);
-		clist.add(11);
-		clist.add(48);
-		clist.print();
-		System.out.println("----");
-		clist.remove(44); // FAIL
-		clist.remove(12);
-		clist.remove(10);
-		clist.print();
-		*/
 	}
 
 	public void actionPerformed(OptionsPane sender, int value) {

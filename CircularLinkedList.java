@@ -27,8 +27,7 @@ public class CircularLinkedList<T> {
 	//constructor for circular linked list that is referenced by the gui
 	public CircularLinkedList(Canvas parent)
 	//PRE: Canvas object is initialized
-	//POST: Circular linked list is initialized with the parent canvas set to imput parameter parent
-			and front end boolean set to true 
+	//POST: Circular linked list is initialized with the parent canvas set to imput parameter parent and front end boolean set to true 
 	{
 		this();
 		isFrontEnd = true;	//this list will be used by the gui class
@@ -87,12 +86,11 @@ public class CircularLinkedList<T> {
 		length++;	//increment length of list
 	}
 
-	//TODO: IDK WHAT THIS DOES
 	private void newState(Node<T> n)
-	//PRE: 
-	//POST:  
+	// PRE: node n is a valid node in this list or null
+	//POST: will add new state to animation queue
 	{
-		if(isFrontEnd) {
+		if(isFrontEnd) { // only push to animation queue if this is the frontend list
 			if(n != null) 
 			{
 				n.isCurrent = true;
@@ -154,7 +152,7 @@ public class CircularLinkedList<T> {
 	}
 
 
-	//TODO: fill in some blanks, not sure what newState does
+
 	public boolean remove(T item) 
 	//PRE: item is initialized
 	//POST: FCTVAL == true if item was removed or false if not removed
@@ -191,21 +189,21 @@ public class CircularLinkedList<T> {
 		newState(null);
 		return false;
 	}
-	//TODO: not sure what newState does
+	
 	public boolean search(T item) 
-	//PRE: 
-    //POST:
+	// PRE: item is what you are looking for
+    //POST: will return true if item is in the list
 
 	{
 		Node<T> tmp = start;
 		int count = 0;
-		if(length == 0) {
+		if(length == 0) { // the list is empty, so item is not in it
 			return false;
 		}
-		while((tmp.next != start && count == 0) || count < 1) {
-			newState(tmp);
+		while((tmp.next != start && count == 0) || count < 1) { // scan list
+			newState(tmp); // mark state if UI list
 			if(tmp.value.equals(item)) {
-				newState(tmp);
+				newState(tmp); // extra new states for longer duration
 				newState(tmp);
 				newState(tmp);
 				newState(tmp);
@@ -248,7 +246,7 @@ public class CircularLinkedList<T> {
 		System.out.print("]\n");
 	}
 
-	//TODO: Double check
+	
 	@Override
 	public CircularLinkedList<T> clone() 
 	//POST: FCTVAL == a copy of this circular linked list
@@ -351,7 +349,6 @@ public class CircularLinkedList<T> {
 			//convert from polar to cartesian coordinates with radius 0.7; x = rcos(theta)
 			double x = Math.cos(angle) * 0.7;		//x = rcos(theta)
 			double y = Math.sin(angle) * 0.7;		//y = rsin(theta)
-			int[] tmp = ScaledPoint.getRealCoordinance(x, y);
 			
 			return ScaledPoint.getRealCoordinance(x, y);
 		}
